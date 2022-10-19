@@ -1,0 +1,93 @@
+ 
+
+
+.title {
+    text-align: center;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .input {
+    width: 30%;
+    height: 150px;
+    border: 1px solid rgb(224, 224, 224);
+    text-align: center;
+    box-shadow: 5px 5px 20px #c4c4c4;
+    border-radius: 30px;
+  
+  }
+  
+  
+  .inputBox {
+    width: 90%;
+    margin-top: 20px;
+    border: .5px solid;
+    height: 30px;
+    border-radius: 5px;
+    border-color: #c4c4c4;
+  font-size: larger;
+  
+  }
+  
+  .inputBox:focus {
+    outline: none !important;
+  
+  
+  }
+  
+  .input button {
+    margin-top: 10px;
+    width: 100px;
+    height: 30px;
+    background-color: aqua;
+    border-radius: 5px;
+    border: none;
+    font-size: medium;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  
+  
+  
+  .tasks{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .tasks h2 {
+    text-decoration: underline;
+  }
+  
+  .task{
+    display: flex;
+        
+   border-radius: 5px;
+     margin: auto;
+    border: 1px solid rgb(211, 211, 211) ;
+    justify-content: space-between;
+    padding: 5px;
+  }
+  
+  .deletebtn{
+  display: flex;
+  flex-direction: column;
+  
+    background-color: red;
+    height: 20px;
+  }
+  
+  .btn{
+    margin-top: 20px;
+    background-color: red;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+  }
+  
+  .task h3{
+    margin-right: 10px;
+  }
