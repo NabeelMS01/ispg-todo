@@ -8,6 +8,8 @@ import { UserController } from './user/user.controller';
 import { UserSchema } from './user/user.model';
 import { UserService } from './user/user.service';
 import {JwtModule} from '@nestjs/jwt'
+import { LocalStrategy } from './auth/local.strategy';
+ 
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://0.0.0.0:27017/todo'),
@@ -17,7 +19,7 @@ import {JwtModule} from '@nestjs/jwt'
     ]),JwtModule.register({
       secret:process.env.JWT_SECRET||"secret",
       signOptions:{expiresIn:"1d"}
-    })
+    }),  
   ],
   controllers: [AppController, UserController],
   providers: [AppService, UserService],

@@ -33,7 +33,7 @@ const index: NextPage = () => {
             setUserData(user.data)
 
         } catch (error: any) {
-            console.log(error.data.message);
+            console.log(error?.data?.message);
             if (error.data.message == 'Unauthorized') {
                 router.push('/login')
             }

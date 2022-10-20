@@ -33,7 +33,7 @@ const Home: NextPage = () => {
 
     const data: any = await createTask(dataTask, config)
     console.log(data);
-    if (data?.data.text) {
+    if (data?.data?.text) {
       setTasks([...tasks, data.data])
 
     }

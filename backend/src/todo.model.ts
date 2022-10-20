@@ -7,7 +7,7 @@ export type TodoDocument = Todo & Document;
 export class Todo {
   @Prop()
   id: string;
-  @Prop({ required: true })
+  @Prop({ unique:false, required: true })
   text: string;
   @Prop( )
   userId: string; 
