@@ -53,38 +53,34 @@ export class UserController {
         throw new NotAcceptableException('Account already exist');
       });
   }
-  @UseGuards(LocalAuthGuard)
+
   @Post('login')
   async login(
-    // @Body('email') email: string,
-    // @Body('password') password: string,
-    @Req() req,
-   
+    @Body('email') email: string,
+    @Body('password') password: string,
+    @Res({ passthrough: true })
+    @Res() response: Response,
   ) {
-   console.log(req);
-   
-    return req.user
-    // const user = await this.userServices.login(email);
-    // if (!user) {
-    //   throw new BadRequestException('invalid credentials');
-    // }
+    const user = await this.userServices.login(email);
 
-    // if (!(await bcrypt.compare(password, user.password))) {
-    //   throw new BadRequestException('invalid credential');
-    // }
-    // const jwt = await this.jwtService.signAsync({ id: user._id });
+    if (!user) {
+      throw new BadRequestException('invalid credentials');
+    }
 
-    // response.cookie('jwt', jwt, { httpOnly: true });
-    // return {
-    //   message: 'success',
-    // };
+    if (!(await bcrypt.compare(password, user.password))) {
+      throw new BadRequestException('invalid credential');
+    }
+    const jwt = await this.jwtService.signAsync({ id: user._id });
+    console.log(user);
+
+    response.cookie('jwt', jwt, { httpOnly: true });
+    const success = { message: 'success' }
+      return success;
   }
+
   @UseGuards(JwtAuthGuard)
   @Get('user')
   async user(@Req() request: Request) {
-
-
-   
     // try {
     //   const cookies = request.cookies['jwt'];
 
@@ -102,12 +98,7 @@ export class UserController {
     //   throw new UnauthorizedException();
     // }
 
-
-
-    
-return request.user
-
-
+    return request.user;
   }
 
   @Post('logout')
