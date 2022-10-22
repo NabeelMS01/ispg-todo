@@ -7,7 +7,7 @@ import { AppController } from './app.controller';
 import { UserController } from './user/user.controller';
 import { UserSchema } from './user/user.model';
 import { UserService } from './user/user.service';
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { LocalStrategy } from './auth/local.strategy';
 
 import { UserModule } from './user/user.module';
@@ -25,16 +25,17 @@ import { jwtConstants } from './auth/constants';
       { name: 'users', schema: UserSchema },
     ]),
     JwtModule.register({
-      secret: jwtConstants.secret ,
+      secret:  jwtConstants.secret,// should be in env file
       signOptions: {
         expiresIn: '1d',
       },
-    }),
-    
-    UserModule,AuthModule
+    }), 
+
+    UserModule,
+    AuthModule,
   ],
   controllers: [AppController, UserController],
-  providers: [AppService,  LocalStrategy,     JwtStrategy],
-  exports:[]
+  providers: [AppService, LocalStrategy, JwtStrategy, JwtService,     ],
+  exports: [],
 })
 export class AppModule {}

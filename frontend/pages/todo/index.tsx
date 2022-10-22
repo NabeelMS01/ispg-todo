@@ -1,109 +1,85 @@
-import type { NextPage } from 'next'
+import type { NextPage } from "next";
 
-
-import { useEffect, useState } from 'react'
-import { createTask, fetchTasks, fetchUser } from '../../services/services'
-import Task from '../../component/Task'
-import styles from '../todo/home.module.css'
-import { useRouter } from 'next/router'
+import { useEffect, useState } from "react";
+import { createTask, fetchTasks, fetchUser } from "../../services/services";
+import Task from "../../component/Task";
+import styles from "../todo/home.module.css";
+import { useRouter } from "next/router";
 
 interface DataTask {
-  _id?: string,
-  id: string,
-  text: string,
-  status: boolean
+  _id?: string;
+  id: string;
+  text: string;
+  status: boolean;
 }
 const Home: NextPage = () => {
-
   const [task, setTask] = useState<string>("");
   const [state, setState] = useState(" ");
   const [tasks, setTasks] = useState<DataTask[]>([]);
 
-  const router = useRouter()
-
-
+  const router = useRouter();
 
   const addData = async () => {
-    const config = {
-      header: {
-        "content-type": "application/json",
-      },
+    const dataTask: DataTask = {
+      id: Date.now().toString(),
+      text: task,
+      status: false,
     };
-    const dataTask: DataTask = { id: Date.now().toString(), text: task, status: false }
+    const token: any = JSON.parse(localStorage?.getItem("userInfo")!);
+    const data: any = await createTask(dataTask, token?.access_token);
 
-    const data: any = await createTask(dataTask, config)
-    console.log(data);
     if (data?.data?.text) {
-      setTasks([...tasks, data.data])
-
+      setTasks([...tasks, data.data]);
     }
     setTask("");
-
-  }
+  };
   const handleSubmit = (e: any) => {
-    e.preventDefault()
-    if (task != '') {
-      addData()
-
-
+    e.preventDefault();
+    if (task != "") {
+      addData();
     }
-
-
-
   };
 
   const addTask = (e: any) => {
-    console.log(e.target.value);
-    setTask(e.target.value)
 
-
+    setTask(e.target.value);
   };
 
   useEffect(() => {
-    fetchData()
+    getuser();
+  }, []);
+
+  useEffect(() => {
+    fetchData();
   }, [state, task]);
 
-
   const fetchData = async () => {
-   try {
-    const token:any =JSON.parse(localStorage?.getItem('userInfo' ) !)
-    const config = {
-        headers: { Authorization: `Bearer ${token.access_token}` }
-    };
-     const user: any = await fetchUser(config) 
- 
-    
-   if(user.data){
-    router.push('/')
-   }
+    const token: any = JSON.parse(localStorage?.getItem("userInfo")!);
+    const tasks: any = await fetchTasks(token.access_token);
 
-   } catch (error) {
-    
-   }
+
+    setTasks(tasks.data);
   };
-
-
-  useEffect(() => {
-    getuser()
-
-  }, [])
-
 
   const getuser = async () => {
     try {
-      const user: any = await fetchUser()
+      const token: any = JSON.parse(localStorage?.getItem("userInfo")!);
 
+      const user: any = await fetchUser(token && token).catch((err) => {
+
+        if (err.data.message == "Unauthorized") {
+          router.push("login");
+        }
+      });
     } catch (error: any) {
-      console.log(error.data.message);
-      if (error.data.message == 'Unauthorized') {
-        router.push('/login')
+
+      if (error?.data?.message == "Unauthorized") {
+        router.push("/login");
       }
     }
-
-  }
+  };
 
   return (
-
     <div className="App">
       <div className={styles.title}>
         <h1>Todo App</h1>
@@ -124,27 +100,14 @@ const Home: NextPage = () => {
       </div>
 
       <div className={styles.tasks}>
-        <h2 className={styles.h2} >Tasks</h2>
-        {
+        <h2 className={styles.h2}>Tasks</h2>
+        {tasks.map((data: DataTask, index: number) => {
 
-
-          tasks.map((data: DataTask, index: number) => {
-            console.log(data)
-            return (
-
-
-
-              <Task key={data._id}
-                data={data}
-                setState={setState}
-              />)
-          }
-
-          )
-        }
+          return <Task key={data._id} data={data} setState={setState} />;
+        })}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

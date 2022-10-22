@@ -29,10 +29,15 @@ const index: NextPage = () => {
         try {
 
             const token: any = JSON.parse(localStorage?.getItem('userInfo')!)
-            const config = {
-                headers: { Authorization: `Bearer ${token.access_token}` }
-            };
-            const user: any = await fetchUser(config)
+
+            const user: any = await fetchUser(token && token).catch((err) => {
+
+                console.log(err.data.message);
+                if(err.data.message=="Unauthorized"){
+                router.push('login')
+                }
+
+            })
 
 
             if (user.data) {
@@ -40,8 +45,8 @@ const index: NextPage = () => {
             }
 
         } catch (error: any) {
-            console.log(error?.data?.message);
-            if (error.data.message == 'Unauthorized') {
+            console.log(error);
+            if (error?.data?.message == 'Unauthorized') {
                 router.push('/login')
             }
         }
@@ -51,15 +56,12 @@ const index: NextPage = () => {
     const logOut = async () => {
 
         try {
-            const data: any = await logout()
+            const data: any = localStorage.removeItem('userInfo')
+                ;
 
-            if (data) {
-                console.log(data);
-
-                router.push('/login')
+            router.push('/login')
 
 
-            }
         } catch (error) {
 
         }

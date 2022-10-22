@@ -8,8 +8,7 @@ import { jwtConstants } from './constants';
 import { JwtStrategy } from '../auth/jwt.strategy';
 
 import { UserModule } from 'src/user/user.module';
-import { UserController } from 'src/user/user.controller';
-import { SessionSerializer } from './session.serializer';
+ 
 
 @Module({
   imports: [
