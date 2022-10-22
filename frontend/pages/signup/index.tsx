@@ -63,7 +63,17 @@ const Signup = () => {
 
     const getuser = async () => {
         try {
-            const user: any = await fetchUser()
+
+            const token: any = JSON.parse(localStorage?.getItem('userInfo')!)
+
+            const user: any = await fetchUser(token && token).catch((err) => {
+
+                console.log(err.data.message);
+                if(err.data.message=="Unauthorized"){
+                router.push('login')
+                }
+
+            })
 
 
             if (user.data) {
@@ -71,8 +81,8 @@ const Signup = () => {
             }
 
         } catch (error: any) {
-            console.log(error.data.message);
-            if (error.data.message == 'Unauthorized') {
+            console.log(error);
+            if (error?.data?.message == 'Unauthorized') {
                 router.push('/login')
             }
         }

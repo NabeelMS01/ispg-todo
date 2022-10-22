@@ -27,34 +27,43 @@ const index: NextPage = () => {
 
     const getuser = async () => {
         try {
-            const user: any = await fetchUser()
 
-            console.log(user.data);
-            setUserData(user.data)
+            const token: any = JSON.parse(localStorage?.getItem('userInfo')!)
+
+            const user: any = await fetchUser(token && token).catch((err) => {
+
+                console.log(err.data.message);
+                if(err.data.message=="Unauthorized"){
+                router.push('login')
+                }
+
+            })
+
+
+            if (user.data) {
+                router.push('/')
+            }
 
         } catch (error: any) {
-            console.log(error?.data?.message);
-            if (error.data.message == 'Unauthorized') {
+            console.log(error);
+            if (error?.data?.message == 'Unauthorized') {
                 router.push('/login')
             }
         }
 
     }
 
-    const logOut =async()=>{
+    const logOut = async () => {
 
         try {
- const    data :any=  await  logout()
-  
-    if(data){
-  console.log(data);
+            const data: any = localStorage.removeItem('userInfo')
+                ;
 
-  router.push('/login')
+            router.push('/login')
 
-  
-    }
+
         } catch (error) {
-            
+
         }
 
 
@@ -65,7 +74,7 @@ const index: NextPage = () => {
             <h1>Todo application </h1>
             <h3>welcome {userData.name}</h3>
             <Link href={'/todo'} >
-                <h2 style={{color:"blue",cursor:"pointer",width:"200px"}}> Go to app</h2>
+                <h2 style={{ color: "blue", cursor: "pointer", width: "200px" }}> Go to app</h2>
             </Link>
 
 

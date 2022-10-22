@@ -21,7 +21,8 @@ function Task(props: dataprops) {
 
 
   const handleDelete = async() => {
-   await deleteTask(_id).then((response)=>{
+    const token: any = JSON.parse(localStorage?.getItem("userInfo")!)?.access_token;
+   await deleteTask(_id,token&&token).then((response)=>{
     console.log(response);
     setState(response)
     
@@ -33,9 +34,9 @@ function Task(props: dataprops) {
         <input
           defaultChecked={status}
           onChange={async (e) => {
-            console.log(e.target.checked);
-
-            await checkTask(data).then((response) => {
+            
+            const token: any = JSON.parse(localStorage?.getItem("userInfo")!)?.access_token;
+            await checkTask(data,token&&token).then((response) => {
               setState(e.target.checked);
             })
           

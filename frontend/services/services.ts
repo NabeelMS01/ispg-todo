@@ -8,32 +8,60 @@ export type Tasks ={
     status:boolean,
 }
 
-export const fetchTasks = async():Promise<Tasks[]>=>{
-    return await http.get('/todo');
+ 
+    // Perform localStorage action
+     
+ 
+
+ 
+ 
+  
+
+
+export const fetchTasks = async(token:any):Promise<Tasks[]>=>{
+    const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    };
+    
+    
+    return await http.get('/todo',config);
 }
 
-export const createTask = async(data:any,config:any):Promise<Tasks[]>=>{
+export const createTask = async(data:any,token:any):Promise<Tasks[]>=>{
+    const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    };
+  
+    
     return await http.post('/todo',data,config);
 }
 
-export const checkTask = async(task:Tasks, ):Promise<Tasks[]>=>{
-    return await http.patch(`/todo/${task._id}`,task);
+export const checkTask = async(task:Tasks,token:string ):Promise<Tasks[]>=>{
+    const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    };
+    return await http.patch(`/todo/${task._id}`,task,config);
 }
 
-export const deleteTask =async(id:Tasks):Promise<Tasks[]>=>{
+export const deleteTask =async(id:Tasks,token:string):Promise<Tasks[]>=>{
    
-    
-    return await http.delete(`/todo/${id}`)
+    const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    };
+    return await http.delete(`/todo/${id}`,config)
 }
 
 // user services 
 
-export const fetchUser = async():Promise<Tasks[]>=>{
-    return await http.get('/api/user');
+export const fetchUser = async(token:any):Promise<Tasks[]>=>{
+    const config = {
+        headers: { Authorization: `Bearer ${token?.access_token}` }
+    };
+    return await http.get('/api/user',config);
 }
 
 export const signup = async(data:any):Promise<Tasks[]>=>{
-    return await http.post('/api/register',data);
+    return await http.post('/api/register',data, );
 }
 
 export const login = async(data:any):Promise<Tasks[]>=>{

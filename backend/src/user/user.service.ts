@@ -4,13 +4,11 @@ import { UserDocument, User } from './user.model';
 const ObjectId = mongoose.Types.ObjectId;
 interface loginUser {
   email: string;
- 
 }
 
 export class UserService {
   constructor(
-    
-    @InjectModel('users') private readonly userModel: Model<UserDocument>
+    @InjectModel('users') private readonly userModel: Model<UserDocument>,
   ) {}
 
   async register(data: User): Promise<User> {
@@ -24,10 +22,8 @@ export class UserService {
     }
   }
 
-  async login(data: string): Promise<any> {
-    console.log(data);
-
-    return this.userModel.findOne({ email: data });
+  async getUserByEmail(email: string): Promise<any> {
+    return this.userModel.findOne({ email: email });
   }
 
   async getUser(_id: string): Promise<any> {

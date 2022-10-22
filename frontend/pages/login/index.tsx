@@ -19,8 +19,10 @@ const Login: NextPage = () => {
             if (email && password) {
 
                 const user: any = await login({ email, password })
-                console.log(user.data.message);
-                if (user?.data?.message == "success") {
+           
+                console.log(user.data);
+                localStorage.setItem("userInfo",JSON.stringify(user.data))
+                if (user  ) {
                     console.log("hello");
 
                     router.push('/')
@@ -54,20 +56,30 @@ const Login: NextPage = () => {
 
 
     const getuser = async () => {
-try {
-     const user: any = await fetchUser() 
- 
-    
-   if(user.data){
-    router.push('/')
-   }
+        try {
 
-} catch (error:any) {
-    console.log(error.data.message);
-    if(error.data.message=='Unauthorized'){
-   router.push('/login')
-    }
-} 
+            const token: any = JSON.parse(localStorage?.getItem('userInfo')!)
+
+            const user: any = await fetchUser(token && token).catch((err) => {
+
+                console.log(err.data.message);
+                if(err.data.message=="Unauthorized"){
+                router.push('login')
+                }
+
+            })
+
+
+            if (user.data) {
+                router.push('/')
+            }
+
+        } catch (error: any) {
+            console.log(error);
+            if (error?.data?.message == 'Unauthorized') {
+                router.push('/login')
+            }
+        }
 
     }
 
