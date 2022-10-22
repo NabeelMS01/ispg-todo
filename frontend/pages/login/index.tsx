@@ -19,8 +19,10 @@ const Login: NextPage = () => {
             if (email && password) {
 
                 const user: any = await login({ email, password })
-                console.log(user.data.message);
-                if (user?.data?.message == "success") {
+           
+                console.log(user.data);
+                localStorage.setItem("userInfo",JSON.stringify(user.data))
+                if (user  ) {
                     console.log("hello");
 
                     router.push('/')
@@ -55,7 +57,12 @@ const Login: NextPage = () => {
 
     const getuser = async () => {
 try {
-     const user: any = await fetchUser() 
+
+    const token:any =JSON.parse(localStorage?.getItem('userInfo' ) !)
+    const config = {
+        headers: { Authorization: `Bearer ${token.access_token}` }
+    };
+     const user: any = await fetchUser(config) 
  
     
    if(user.data){

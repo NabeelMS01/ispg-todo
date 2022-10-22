@@ -18,12 +18,15 @@ import { Request, response, Response } from 'express';
 import { UserService } from './user.service';
 import { LocalAuthGuard } from 'src/auth/local-auth.gaurd';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.gaurd';
+import { AuthService } from 'src/auth/auth.service';
+import { AuthenticatedGuard } from 'src/auth/authenticated.gaurd';
 
 @Controller('api')
 export class UserController {
   constructor(
     private readonly userServices: UserService,
     private jwtService: JwtService,
+    private authService: AuthService,
   ) {}
 
   @Post('/register')
@@ -54,33 +57,45 @@ export class UserController {
       });
   }
 
+  @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(
-    @Body('email') email: string,
-    @Body('password') password: string,
-    @Res({ passthrough: true })
-    @Res() response: Response,
-  ) {
-    const user = await this.userServices.login(email);
+  login(@Req() req): any {
+    const { name, _id } = req.user;
+   
 
-    if (!user) {
-      throw new BadRequestException('invalid credentials');
-    }
-
-    if (!(await bcrypt.compare(password, user.password))) {
-      throw new BadRequestException('invalid credential');
-    }
-    const jwt = await this.jwtService.signAsync({ id: user._id });
-    console.log(user);
-
-    response.cookie('jwt', jwt, { httpOnly: true });
-    const success = { message: 'success' }
-      return success;
+  return  this.authService.loginAuth({ name, _id });
+     
   }
 
+  // async login(
+  //   @Body('email') email: string,
+  //   @Body('password') password: string,
+  //   @Res({ passthrough: true })
+  //   @Res() response: Response,
+  // ) {
+  //   const user = await this.userServices.login(email);
+
+  //   if (!user) {
+  //     throw new BadRequestException('invalid credentials');
+  //   }
+
+  //   if (!(await bcrypt.compare(password, user.password))) {
+  //     throw new BadRequestException('invalid credential');
+  //   }
+  //   const jwt = await this.jwtService.signAsync({ id: user._id });
+  //   console.log(user);
+
+  //   response.cookie('jwt', jwt, { httpOnly: true });
+  //   const success = { message: 'success' }
+  //     return success;
+  // }
+
+  //  @UseGuards(AuthenticatedGuard)
   @UseGuards(JwtAuthGuard)
   @Get('user')
   async user(@Req() request: Request) {
+    console.log(request.user);
+
     // try {
     //   const cookies = request.cookies['jwt'];
 

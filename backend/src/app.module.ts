@@ -14,6 +14,7 @@ import { UserModule } from './user/user.module';
 import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { JwtStrategy } from './auth/jwt.strategy';
+import { jwtConstants } from './auth/constants';
 
 @Global()
 @Module({
@@ -24,7 +25,7 @@ import { JwtStrategy } from './auth/jwt.strategy';
       { name: 'users', schema: UserSchema },
     ]),
     JwtModule.register({
-      secret: 'secret' || process.env.JWT_SECRET,
+      secret: jwtConstants.secret ,
       signOptions: {
         expiresIn: '1d',
       },
@@ -33,6 +34,7 @@ import { JwtStrategy } from './auth/jwt.strategy';
     UserModule,AuthModule
   ],
   controllers: [AppController, UserController],
-  providers: [AppService,  LocalStrategy,    JwtStrategy],
+  providers: [AppService,  LocalStrategy,     JwtStrategy],
+  exports:[]
 })
 export class AppModule {}

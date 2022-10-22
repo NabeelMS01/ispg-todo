@@ -63,12 +63,17 @@ const Signup = () => {
 
     const getuser = async () => {
         try {
-            const user: any = await fetchUser()
-
-
-            if (user.data) {
-                router.push('/')
-            }
+           
+    const token:any =JSON.parse(localStorage?.getItem('userInfo' ) !)
+    const config = {
+        headers: { Authorization: `Bearer ${token.access_token}` }
+    };
+     const user: any = await fetchUser(config) 
+ 
+    
+   if(user.data){
+    router.push('/')
+   }
 
         } catch (error: any) {
             console.log(error.data.message);

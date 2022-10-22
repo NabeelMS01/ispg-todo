@@ -65,10 +65,21 @@ const Home: NextPage = () => {
 
 
   const fetchData = async () => {
-    const tasks: any = await fetchTasks();
-    console.log(tasks.data);
+   try {
+    const token:any =JSON.parse(localStorage?.getItem('userInfo' ) !)
+    const config = {
+        headers: { Authorization: `Bearer ${token.access_token}` }
+    };
+     const user: any = await fetchUser(config) 
+ 
+    
+   if(user.data){
+    router.push('/')
+   }
 
-    setTasks(tasks.data);
+   } catch (error) {
+    
+   }
   };
 
 

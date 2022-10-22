@@ -22,7 +22,7 @@ export class UserService {
     }
   }
 
-  async login(email: string): Promise<any> {
+  async getUserByEmail(email: string): Promise<any> {
     return this.userModel.findOne({ email: email });
   }
 

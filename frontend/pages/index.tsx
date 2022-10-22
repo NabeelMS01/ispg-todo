@@ -27,10 +27,17 @@ const index: NextPage = () => {
 
     const getuser = async () => {
         try {
-            const user: any = await fetchUser()
 
-            console.log(user.data);
-            setUserData(user.data)
+            const token: any = JSON.parse(localStorage?.getItem('userInfo')!)
+            const config = {
+                headers: { Authorization: `Bearer ${token.access_token}` }
+            };
+            const user: any = await fetchUser(config)
+
+
+            if (user.data) {
+                router.push('/')
+            }
 
         } catch (error: any) {
             console.log(error?.data?.message);
@@ -41,20 +48,20 @@ const index: NextPage = () => {
 
     }
 
-    const logOut =async()=>{
+    const logOut = async () => {
 
         try {
- const    data :any=  await  logout()
-  
-    if(data){
-  console.log(data);
+            const data: any = await logout()
 
-  router.push('/login')
+            if (data) {
+                console.log(data);
 
-  
-    }
+                router.push('/login')
+
+
+            }
         } catch (error) {
-            
+
         }
 
 
@@ -65,7 +72,7 @@ const index: NextPage = () => {
             <h1>Todo application </h1>
             <h3>welcome {userData.name}</h3>
             <Link href={'/todo'} >
-                <h2 style={{color:"blue",cursor:"pointer",width:"200px"}}> Go to app</h2>
+                <h2 style={{ color: "blue", cursor: "pointer", width: "200px" }}> Go to app</h2>
             </Link>
 
 

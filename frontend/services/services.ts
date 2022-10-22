@@ -8,6 +8,16 @@ export type Tasks ={
     status:boolean,
 }
 
+ 
+    // Perform localStorage action
+     
+ 
+
+ 
+ 
+  
+
+
 export const fetchTasks = async():Promise<Tasks[]>=>{
     return await http.get('/todo');
 }
@@ -28,12 +38,12 @@ export const deleteTask =async(id:Tasks):Promise<Tasks[]>=>{
 
 // user services 
 
-export const fetchUser = async():Promise<Tasks[]>=>{
-    return await http.get('/api/user');
+export const fetchUser = async(config:any):Promise<Tasks[]>=>{
+    return await http.get('/api/user',config);
 }
 
 export const signup = async(data:any):Promise<Tasks[]>=>{
-    return await http.post('/api/register',data);
+    return await http.post('/api/register',data, );
 }
 
 export const login = async(data:any):Promise<Tasks[]>=>{
